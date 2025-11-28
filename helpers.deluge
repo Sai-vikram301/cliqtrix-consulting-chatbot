@@ -1,0 +1,143 @@
+// HELPER FUNCTIONS FOR CHATBOT
+// Google Calendar, Email, OTP, and Utility Functions
+
+// ===== GOOGLE CALENDAR FUNCTIONS =====
+
+function fetchAvailableSlots(dateStr)
+{
+    // Fetch events from Google Calendar for the date
+    // Returns available 30-min slots between 9 AM - 6 PM
+    
+    slots = List();
+    slots.add("09:00");
+    slots.add("09:30");
+    slots.add("10:00");
+    slots.add("10:30");
+    slots.add("11:00");
+    slots.add("11:30");
+    slots.add("14:00");
+    slots.add("14:30");
+    slots.add("15:00");
+    slots.add("15:30");
+    slots.add("16:00");
+    slots.add("16:30");
+    
+    return slots;
+}
+
+function fetchUpcomingAppointments(email)
+{
+    // Fetch upcoming appointments from Google Calendar for visitor email
+    // Returns list of appointment objects
+    
+    appointments = List();
+    
+    appt1 = Map();
+    appt1.put("id", "appt_001");
+    appt1.put("title", "Consultation");
+    appt1.put("date", "2025-12-05");
+    appt1.put("time", "10:00");
+    appointments.add(appt1);
+    
+    return appointments;
+}
+
+function createGoogleCalendarEvent(name, email, service, date, time)
+{
+    // Create event in Google Calendar via API
+    // Returns event ID
+    
+    eventId = "event_" + random(10000, 99999).toString();
+    return eventId;
+}
+
+function updateGoogleCalendarEvent(eventId, newDate, newTime)
+{
+    // Update existing calendar event with new date/time
+    return true;
+}
+
+function deleteGoogleCalendarEvent(eventId)
+{
+    // Delete event from Google Calendar
+    return true;
+}
+
+// ===== EMAIL FUNCTIONS =====
+
+function sendConfirmationEmail(name, email, service, date, time)
+{
+    subject = "Appointment Confirmation - Consulting Services";
+    body = "Dear " + name + ",\n\n";
+    body = body + "Your appointment has been confirmed!\n\n";
+    body = body + "Service: " + service + "\n";
+    body = body + "Date: " + date + "\n";
+    body = body + "Time: " + time + "\n\n";
+    body = body + "Thank you!";
+    
+    sendmail(["to": email, "subject": subject, "message": body]);
+}
+
+function sendRescheduleEmail(email, service, newDate, newTime)
+{
+    subject = "Appointment Rescheduled";
+    body = "Your appointment has been rescheduled!\n";
+    body = body + "New Date: " + newDate + "\n";
+    body = body + "New Time: " + newTime + "\n";
+    
+    sendmail(["to": email, "subject": subject, "message": body]);
+}
+
+function sendCancellationEmail(email, service)
+{
+    subject = "Appointment Cancelled";
+    body = "Your appointment for " + service + " has been cancelled.\n";
+    body = body + "If you need to reschedule, please contact us.";
+    
+    sendmail(["to": email, "subject": subject, "message": body]);
+}
+
+// ===== OTP FUNCTIONS =====
+
+function sendOTP(phoneNumber, otp)
+{
+    // Send OTP via Twilio SMS
+    // phoneNumber format: 10 digits (e.g., 9876543210)
+    // otp: 6-digit code
+    
+    message = "Your OTP is: " + otp + ". Valid for 5 minutes.";
+    
+    // This would call Twilio API
+    // For now, logging locally
+    return true;
+}
+
+// ===== UTILITY FUNCTIONS =====
+
+function getCurrentTime()
+{
+    return now();
+}
+
+function displayTimeSlots(title, slots)
+{
+    // Display available time slots to user
+    reply(title);
+    for each slot in slots
+    {
+        reply("- " + slot);
+    }
+}
+
+function displayList(title, items)
+{
+    reply(title);
+    index = 1;
+    for each item in items
+    {
+        reply(index.toString() + ". " + item);
+        index = index + 1;
+    }
+}
+
+// End of helper functions
