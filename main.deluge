@@ -1,0 +1,190 @@
+// CLIQTRIX 2025 - CONSULTING SERVICES CHATBOT
+// Main Conversation Handler for Zoho SalesIQ
+// Appointment Booking, Rescheduling & Management
+
+if(conversationContext == null || conversationContext == "")
+{
+    reply("Welcome to Consulting Services Bot! 👋");
+    displaySuggestions(["Book Appointment", "Reschedule/Cancel"]);
+    conversationContext = "greeting";
+}
+
+// ===== BOOK APPOINTMENT FLOW =====
+
+if(userInput == "Book Appointment")
+{
+    reply("Select a service type:");
+    displaySuggestions(["Consultation", "Complete Checkup", "Follow-up"]);
+    conversationContext = "service_selected";
+}
+
+if(conversationContext == "service_selected")
+{
+    selectedService = userInput;
+    session.put("selected_service", selectedService);
+    question("Enter your name:");
+    conversationContext = "collect_name";
+}
+
+if(conversationContext == "collect_name")
+{
+    visitorName = userInput;
+    session.put("visitor_name", visitorName);
+    question("Enter your email:");
+    conversationContext = "collect_email";
+}
+
+if(conversationContext == "collect_email")
+{
+    visitorEmail = userInput;
+    session.put("visitor_email", visitorEmail);
+    question("Enter your phone number:");
+    conversationContext = "collect_phone";
+}
+
+if(conversationContext == "collect_phone")
+{
+    visitorPhone = userInput;
+    session.put("visitor_phone", visitorPhone);
+    
+    // Generate and send OTP
+    otp = toInteger(random(100000, 999999)).toString();
+    session.put("generated_otp", otp);
+    
+    reply("OTP: " + otp + " sent to your phone");
+    question("Enter OTP to verify:");
+    conversationContext = "otp_verification";
+}
+
+if(conversationContext == "otp_verification")
+{
+    enteredOTP = userInput;
+    generatedOTP = session.get("generated_otp");
+    
+    if(enteredOTP == generatedOTP)
+    {
+        reply("Phone verified! ✓");
+        question("Select date (YYYY-MM-DD):");
+        conversationContext = "date_selection";
+    }
+    else
+    {
+        reply("Invalid OTP");
+        question("Try again:");
+    }
+}
+
+if(conversationContext == "date_selection")
+{
+    preferredDate = userInput;
+    session.put("preferred_date", preferredDate);
+    reply("Available slots: 09:00, 10:00, 11:00, 14:00, 15:00, 16:00");
+    question("Select time slot:");
+    conversationContext = "slot_selection";
+}
+
+if(conversationContext == "slot_selection")
+{
+    selectedSlot = userInput;
+    session.put("selected_slot", selectedSlot);
+    reply("Proceed to payment?");
+    displaySuggestions(["Pay Now", "Skip"]);
+    conversationContext = "payment_choice";
+}
+
+if(conversationContext == "payment_choice" && userInput == "Pay Now")
+{
+    visitorEmail = session.get("visitor_email");
+    paymentLink = "https://stripe.com/checkout?amount=500&email=" + visitorEmail;
+    reply("Pay here: " + paymentLink);
+    conversationContext = "booking_confirmation";
+}
+
+if(conversationContext == "payment_choice" && userInput == "Skip")
+{
+    conversationContext = "booking_confirmation";
+}
+
+if(conversationContext == "booking_confirmation")
+{
+    visitorName = session.get("visitor_name");
+    visitorEmail = session.get("visitor_email");
+    selectedService = session.get("selected_service");
+    preferredDate = session.get("preferred_date");
+    selectedSlot = session.get("selected_slot");
+    
+    reply("✅ APPOINTMENT CONFIRMED");
+    reply("Service: " + selectedService);
+    reply("Date: " + preferredDate + " at " + selectedSlot);
+    reply("Confirmation sent to " + visitorEmail);
+    
+    conversationContext = "greeting";
+    displaySuggestions(["Book Another", "Reschedule/Cancel"]);
+}
+
+// ===== RESCHEDULE/CANCEL FLOW =====
+
+if(userInput == "Reschedule/Cancel")
+{
+    question("Enter email to fetch appointments:");
+    conversationContext = "reschedule_email";
+}
+
+if(conversationContext == "reschedule_email")
+{
+    rescheduleEmail = userInput;
+    session.put("reschedule_email", rescheduleEmail);
+    reply("Your upcoming appointments:");
+    reply("1. Consultation - 2025-12-05 10:00");
+    reply("2. Checkup - 2025-12-10 14:00");
+    question("Select appointment:");
+    conversationContext = "select_appointment";
+}
+
+if(conversationContext == "select_appointment")
+{
+    selectedAppt = userInput;
+    session.put("selected_appointment", selectedAppt);
+    displaySuggestions(["Reschedule", "Cancel"]);
+    conversationContext = "reschedule_action";
+}
+
+if(conversationContext == "reschedule_action" && userInput == "Reschedule")
+{
+    question("Enter new date:");
+    conversationContext = "reschedule_date";
+}
+
+if(conversationContext == "reschedule_date")
+{
+    newDate = userInput;
+    session.put("reschedule_date", newDate);
+    reply("Available slots: 09:00, 10:00, 11:00, 14:00");
+    question("Select time:");
+    conversationContext = "reschedule_slot";
+}
+
+if(conversationContext == "reschedule_slot")
+{
+    newSlot = userInput;
+    rescheduleEmail = session.get("reschedule_email");
+    newDate = session.get("reschedule_date");
+    
+    reply("✓ Rescheduled to " + newDate + " at " + newSlot);
+    reply("Confirmation sent to " + rescheduleEmail);
+    
+    conversationContext = "greeting";
+    displaySuggestions(["Book Appointment", "Reschedule/Cancel"]);
+}
+
+if(conversationContext == "reschedule_action" && userInput == "Cancel")
+{
+    rescheduleEmail = session.get("reschedule_email");
+    reply("✓ Appointment cancelled");
+    reply("Confirmation sent to " + rescheduleEmail);
+    
+    conversationContext = "greeting";
+    displaySuggestions(["Book Appointment", "Check Appointments"]);
+}
+
+// End of conversation handler
