@@ -1,0 +1,99 @@
+# Cliqtrix 2025 - Consulting Services Chatbot
+# Dependencies and Requirements
+
+# Platform & Language
+Zoho SalesIQ API=Latest
+Deluge Scripting Language=Latest
+
+# Third-Party Integrations
+Google Calendar API=v3
+Google OAuth 2.0=Latest
+Twilio SMS API=Latest
+Stripe API=Latest (optional, for payment)
+Zoho Mail API=Latest (or SMTP)
+
+# Required Credentials
+# - Google Cloud Project with Calendar API enabled
+# - Twilio Account with SMS capabilities
+# - Stripe Connect Account (optional)
+# - Zoho Account with SalesIQ enabled
+
+# APIs & Endpoints
+Google Calendar:
+  - https://www.googleapis.com/calendar/v3/
+  - OAuth 2.0 scope: https://www.googleapis.com/auth/calendar
+
+Twilio:
+  - https://api.twilio.com/2010-04-01/
+  - SMS endpoint for OTP delivery
+
+Stripe (Optional):
+  - https://checkout.stripe.com/
+  - Payment link generation
+
+Zoho Zia (AI, Optional):
+  - Service suggestion API
+  - Natural language processing
+
+# Connection Requirements (Zoho SalesIQ)
+1. google_calendar_connection - OAuth 2.0
+2. twilio_connection - Basic Authentication
+3. stripe_connection - API Key (optional)
+4. zoho_mail_connection - SMTP/OAuth (email)
+
+# Browser & Platform Support
+- Desktop: Chrome, Firefox, Safari, Edge
+- Mobile: iOS Safari, Chrome Mobile, Android Browser
+- Chat Channels: Website, Facebook Messenger, WhatsApp, Mobile App
+
+# Performance Requirements
+- Response Time: < 2 seconds
+- OTP Delivery: < 5 seconds
+- Calendar Query: < 1 second
+- Email Delivery: < 30 seconds
+
+# Security Requirements
+- OAuth 2.0 for Google authentication
+- HTTPS for all API calls
+- SSL/TLS encryption
+- PCI compliance (for payment data)
+- GDPR compliance (for visitor data)
+
+# Testing Tools
+- Zoho SalesIQ Bot Sandbox
+- Postman (for API testing)
+- Google OAuth 2.0 Playground
+- Twilio Testing Console
+
+# Deployment Checklist
+- [ ] Zoho SalesIQ bot created and tested
+- [ ] Google Calendar OAuth configured
+- [ ] Twilio account and SMS service ready
+- [ ] Email service configured
+- [ ] Stripe account setup (if payment enabled)
+- [ ] Production credentials secured
+- [ ] Bot published to SalesIQ channels
+- [ ] End-to-end testing completed
+- [ ] Performance testing passed
+- [ ] Security review completed
+
+# Documentation
+- README.md - Project overview
+- SETUP.md - Detailed setup instructions
+- main.deluge - Main conversation handler
+- helpers.deluge - Helper functions
+requirements.txt - This file
+
+# Support & Resources
+- Zoho SalesIQ: https://www.zoho.com/salesiq/
+- Deluge Documentation: https://www.zoho.com/deluge/help/
+- Google Calendar API: https://developers.google.com/calendar
+- Twilio SDK: https://www.twilio.com/docs/libraries
+- Stripe Documentation: https://stripe.com/docs
+
+# Contest Information
+- Competition: Cliqtrix 2025 by Zoho
+- Submission Deadline: November 30, 2025
+- Category: Chatbot (Consulting Services)
+- Platform: Zoho SalesIQ
+- Language: Deluge Script
